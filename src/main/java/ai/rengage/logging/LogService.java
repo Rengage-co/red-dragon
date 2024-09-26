@@ -9,13 +9,13 @@ import java.util.Properties;
 
 public class LogService {
     private static final Logger logger = LoggerFactory.getLogger(LogService.class);
-    private String propertyValue;
-    private final String contextName;
+    private String propertyValue="logger-service";
+//    private final String contextName;
 
     public LogService() {
         // 获取 LoggerContext 并读取 contextName
-        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-        this.contextName = context.getName();
+//        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+//        this.contextName = context.getName();
         loadProperties();
     }
 
@@ -25,9 +25,6 @@ public class LogService {
             if (input != null) {
                 properties.load(input);
                 propertyValue = properties.getProperty("spring.application.name", "rengage-logger");
-            }
-            if (null == propertyValue || propertyValue.isBlank() || propertyValue.isEmpty()){
-                propertyValue = contextName;
             }
         } catch (IOException e) {
             logger.error("Error loading properties", e);
