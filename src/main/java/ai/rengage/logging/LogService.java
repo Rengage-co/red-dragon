@@ -21,9 +21,6 @@ public class LogService {
     private String getCallerInfo() {
         // stackTrace[2] 是调用 info/debug/error 方法的调用者
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        for (int i = 0; i < stackTrace.length; i++) {
-            System.out.println(i + ": " + stackTrace[i]);
-        }
         StackTraceElement caller = stackTrace[3];
         return caller.getClassName() + "." + caller.getMethodName() + "()";
     }
