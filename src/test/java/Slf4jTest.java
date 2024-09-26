@@ -6,10 +6,10 @@ public class Slf4jTest {
     @Test
     public void test01(){
         //日志输出
-        logService.error("error");
+        logService.info("error");
 //        logService.warn("wring");
         logService.info("info");
-        logService.debug("debug");
+//        logService.debug("debug");
 //        logService.trace("trance");
 
     }
