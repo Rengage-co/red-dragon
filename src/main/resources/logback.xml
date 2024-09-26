@@ -11,8 +11,8 @@ configuration 子节点为 appender、logger、root
             -->
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <!--用于区分不同应用程序的记录-->
-    <property name="APP_Name" value="logger-service" />
-    <contextName>${APP_Name}</contextName>
+<!--    <property name="APP_Name" value="logger-service" />-->
+<!--    <contextName>${APP_Name}</contextName>-->
     <!--日志文件所在目录，如果是tomcat，如下写法日志文件会在则为${TOMCAT_HOME}/bin/logs/目录下-->
 
     <!--控制台-->
