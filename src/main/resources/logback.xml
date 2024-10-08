@@ -13,9 +13,10 @@ configuration 子节点为 appender、logger、root
     <!--用于区分不同应用程序的记录-->
 <!--    <property name="APP_Name" value="logger-service" />-->
 <!--    <contextName>${APP_Name}</contextName>-->
-    <property name="SERVICE_NAME" value="${SERVICE_NAME:-default-service}" />
+<!--    <property name="SERVICE_NAME" value="${SERVICE_NAME:-default-service}" />-->
     <!--日志文件所在目录，如果是tomcat，如下写法日志文件会在则为${TOMCAT_HOME}/bin/logs/目录下-->
-
+    <property resource="application.properties" />
+    <property name="SERVICE_NAME" value="${service.name:-default-service}" />
     <!--控制台-->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
 <!--        <encoder>-->
