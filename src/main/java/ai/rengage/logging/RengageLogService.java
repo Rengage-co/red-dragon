@@ -8,14 +8,13 @@ import org.slf4j.MDC;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
-public class LogService {
-    private static final Logger logger = LoggerFactory.getLogger(LogService.class);
+public class RengageLogService {
+    private static final Logger logger = LoggerFactory.getLogger(RengageLogService.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private final String className;
 
-    public LogService(String className) {
+    public RengageLogService(String className) {
         this.className = className;
     }
 

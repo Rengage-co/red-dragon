@@ -1,14 +1,12 @@
 package ai.rengage.logging;
 
-import org.slf4j.MDC;
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class TestLogger {
 
     public static void main(String[] args) {
-        LogService logger = LoggerFactory.getLogger("TestLogger");
+        RengageLogService logger = RengageLoggerFactory.getLogger("TestLogger");
         Map<String, String> arg = new HashMap<>();
         arg.put("github_stars", "4000");
         arg.put("forks", "2800");
