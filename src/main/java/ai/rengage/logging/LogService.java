@@ -48,23 +48,23 @@ public class LogService {
                 logMap.put("exception", throwable.toString());
 //                logMap.put("stackTrace", getStackTraceAsString(throwable));
             }
-            String jsonLog = objectMapper.writeValueAsString(logMap);
+//            String jsonLog = objectMapper.writeValueAsString(logMap);
             switch (level.toLowerCase()) {
                 case "info":
 //                    logger.info("{}-{}() {}",className,methodName,jsonLog);
                     logger.info(message,StructuredArguments.entries(logMap));
                     break;
                 case "warn":
-                    logger.warn("{}-{}() {}",className,jsonLog);
+                    logger.warn(message,StructuredArguments.entries(logMap));
                     break;
                 case "error":
-                    logger.error("{}-{}() {}",className,jsonLog);
+                    logger.error(message,StructuredArguments.entries(logMap));
                     break;
                 case "debug":
-                    logger.debug("{}-{}() {}",className,jsonLog);
+                    logger.debug(message,StructuredArguments.entries(logMap));
                     break;
                 default:
-                    logger.info("{}-{}() {}",className,jsonLog);
+                    logger.info(message,StructuredArguments.entries(logMap));
             }
         } catch (Exception e) {
             logger.error("Error while logging: " + e.getMessage());
