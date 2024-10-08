@@ -2,7 +2,7 @@ package ai.rengage.logging;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ch.qos.logback.classic.LoggerContext;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -21,6 +21,7 @@ public class LogService {
 
     private void loadProperties() {
         Properties properties = new Properties();
+        logger.info("loadProperties========");
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
             if (input != null) {
                 properties.load(input);

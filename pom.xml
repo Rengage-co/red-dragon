@@ -16,11 +16,11 @@
 
     <dependencies>
         <!-- Slf4j 依赖 -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.30</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.slf4j</groupId>-->
+<!--            <artifactId>slf4j-api</artifactId>-->
+<!--            <version>1.7.30</version>-->
+<!--        </dependency>-->
         <!-- logback 依赖 -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
