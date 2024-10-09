@@ -48,6 +48,14 @@ configuration 子节点为 appender、logger、root
 <!--            </provider>-->
         </encoder>
     </appender>
+    <!-- 设置 Spring 框架的日志级别为 OFF -->
+    <logger name="org.springframework" level="WARN" />
+
+    <!-- 设置其他常见的系统日志级别为 OFF -->
+    <logger name="org.hibernate" level="WARN" />
+    <logger name="org.apache" level="WARN" />
+    <logger name="com.zaxxer.hikari" level="WARN" />
+    <logger name="com.baomidou" level="WARN" />
 
 <!--    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
 <!--        <file>logs/application.log</file>-->
