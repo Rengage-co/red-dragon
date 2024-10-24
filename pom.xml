@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ai.rengage.logging</groupId>
-    <artifactId>logger</artifactId>
+    <artifactId>rengage-logger</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
