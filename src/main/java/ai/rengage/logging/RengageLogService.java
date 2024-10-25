@@ -2,6 +2,7 @@ package ai.rengage.logging;
 
 import ch.qos.logback.classic.Level;
 import net.logstash.logback.argument.StructuredArguments;
+import net.logstash.logback.encoder.org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -49,7 +50,7 @@ public class RengageLogService {
             Map<String, String> logMap = new HashMap<>();
             logMap.put("className", className);
             if (throwable != null) {
-                logMap.put("exception", throwable.toString());
+                logMap.put("exception", ExceptionUtils.getStackTrace(throwable));
             }
             switch (level.levelStr.toLowerCase()) {
                 case "warn":
