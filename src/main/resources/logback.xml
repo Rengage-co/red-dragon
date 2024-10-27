@@ -40,7 +40,7 @@ configuration 子节点为 appender、logger、root
             <customFields>{"service_name":"${SERVICE_NAME}"}</customFields>
             <!-- 添加 MDC 提供者 -->
             <provider class="net.logstash.logback.composite.loggingevent.MdcJsonProvider"/>
-
+            <charset>UTF-8</charset>
             <!-- 或者，如果你只想包含特定的 MDC 键 -->
 <!--            <provider class="net.logstash.logback.composite.loggingevent.MdcJsonProvider">-->
 <!--                <includeMdcKeyName>param1</includeMdcKeyName>-->
