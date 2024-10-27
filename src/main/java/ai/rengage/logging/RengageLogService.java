@@ -9,10 +9,17 @@ import org.slf4j.MDC;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class RengageLogService {
     private static final Logger logger = LoggerFactory.getLogger(RengageLogService.class);
     private final String className;
+    private static final String TRACE_ID = "traceId";
+
+    // 添加生成 traceId 的方法
+    private String generateTraceId() {
+        return UUID.randomUUID().toString();
+    }
 
     public RengageLogService(String className) {
         this.className = className;
@@ -36,6 +43,9 @@ public class RengageLogService {
 
     private void logWithContext(String methodName, Map<String, String> arg, Level level, String message, Throwable throwable) {
         try (MDC.MDCCloseable ignored = MDC.putCloseable("methodName", methodName)) {
+            if (MDC.get(TRACE_ID) == null) {
+                MDC.put(TRACE_ID, generateTraceId());
+            }
             if (arg != null) {
                 MDC.setContextMap(arg);
             }
@@ -49,6 +59,10 @@ public class RengageLogService {
         try {
             Map<String, String> logMap = new HashMap<>();
             logMap.put("className", className);
+            String traceId = MDC.get(TRACE_ID);
+            if (traceId != null) {
+                logMap.put(TRACE_ID, traceId);
+            }
             if (throwable != null) {
                 logMap.put("exception", ExceptionUtils.getStackTrace(throwable));
             }

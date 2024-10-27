@@ -46,6 +46,7 @@ configuration 子节点为 appender、logger、root
 <!--                <includeMdcKeyName>param1</includeMdcKeyName>-->
 <!--                <includeMdcKeyName>param2</includeMdcKeyName>-->
 <!--            </provider>-->
+            <includeMdcKeyName>traceId</includeMdcKeyName>
         </encoder>
     </appender>
     <!-- 设置 Spring 框架的日志级别为 OFF -->
