@@ -49,7 +49,8 @@ public class RengageLogService {
 
             // 如果有额外参数，添加到MDC中
             if (arg != null) {
-                arg.forEach(MDC::put);
+                MDC.setContextMap(arg);
+//                arg.forEach(MDC::put);
             }
             log(level, message, throwable);
         }
