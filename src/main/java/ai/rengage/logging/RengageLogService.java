@@ -44,13 +44,13 @@ public class RengageLogService {
     private void logWithContext(String methodName, Map<String, String> arg, Level level, String message, Throwable throwable) {
         try (MDC.MDCCloseable ignored = MDC.putCloseable("methodName", methodName)) {
             if (MDC.get(TRACE_ID) == null) {
-                MDC.put(TRACE_ID, generateTraceId());
+//                MDC.put(TRACE_ID, generateTraceId());
             }
 
             // 如果有额外参数，添加到MDC中
             if (arg != null) {
-                MDC.setContextMap(arg);
-//                arg.forEach(MDC::put);
+//                MDC.setContextMap(arg);
+                arg.forEach(MDC::put);
             }
             log(level, message, throwable);
         }
