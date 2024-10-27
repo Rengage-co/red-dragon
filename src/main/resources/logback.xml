@@ -41,12 +41,10 @@ configuration 子节点为 appender、logger、root
             <!-- 添加 MDC 提供者 -->
             <provider class="net.logstash.logback.composite.loggingevent.MdcJsonProvider"/>
             <charset>UTF-8</charset>
-            <!-- 或者，如果你只想包含特定的 MDC 键 -->
-<!--            <provider class="net.logstash.logback.composite.loggingevent.MdcJsonProvider">-->
-<!--                <includeMdcKeyName>param1</includeMdcKeyName>-->
-<!--                <includeMdcKeyName>param2</includeMdcKeyName>-->
-<!--            </provider>-->
-            <includeMdcKeyName>traceId</includeMdcKeyName>
+
+            <!-- 参数提供者 -->
+            <provider class="net.logstash.logback.composite.loggingevent.ArgumentsJsonProvider"/>
+            <includeMdc>true</includeMdc>
         </encoder>
     </appender>
     <!-- 设置 Spring 框架的日志级别为 OFF -->

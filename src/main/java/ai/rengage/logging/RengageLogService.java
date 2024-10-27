@@ -46,23 +46,25 @@ public class RengageLogService {
             if (MDC.get(TRACE_ID) == null) {
                 MDC.put(TRACE_ID, generateTraceId());
             }
+
+            // 如果有额外参数，添加到MDC中
             if (arg != null) {
-                MDC.setContextMap(arg);
+                arg.forEach(MDC::put);
             }
             log(level, message, throwable);
-        } finally {
-            MDC.clear();
         }
     }
 
     private void log(Level level, String message, Throwable throwable) {
         try {
             Map<String, String> logMap = new HashMap<>();
+            // 收集所有MDC中的内容
+            logMap.putAll(MDC.getCopyOfContextMap() != null ? MDC.getCopyOfContextMap() : new HashMap<>());
+
+            // 添加className
             logMap.put("className", className);
-            String traceId = MDC.get(TRACE_ID);
-            if (traceId != null) {
-                logMap.put(TRACE_ID, traceId);
-            }
+
+            // 如果有异常，添加异常信息
             if (throwable != null) {
                 logMap.put("exception", ExceptionUtils.getStackTrace(throwable));
             }
@@ -81,6 +83,8 @@ public class RengageLogService {
             }
         } catch (Exception e) {
             logger.error("Error while logging: " + e.getMessage(), e);
+        }finally {
+            MDC.clear();
         }
     }
 }
