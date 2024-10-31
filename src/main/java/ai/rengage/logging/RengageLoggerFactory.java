@@ -1,7 +1,7 @@
 package ai.rengage.logging;
 
 public class RengageLoggerFactory {
-    public static RengageLogService getLogger(String className) {
-        return new RengageLogService(className);
+    public static RengageLogService getLogger() {
+        return new RengageLogService();
     }
 }

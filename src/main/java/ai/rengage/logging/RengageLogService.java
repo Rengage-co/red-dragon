@@ -10,38 +10,102 @@ import org.slf4j.MDC;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RengageLogService {
+public class RengageLogService implements RengageLogger {
     private static final Logger logger = LoggerFactory.getLogger(RengageLogService.class);
-    private final String className;
+    private static final String JAVA_VERSION = System.getProperty("java.version");
+    private static final boolean IS_JAVA_9_OR_HIGHER = !JAVA_VERSION.startsWith("1.");
 
-    public RengageLogService(String className) {
-        this.className = className;
+    private static final StackWalker STACK_WALKER = IS_JAVA_9_OR_HIGHER
+            ? StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE)
+            : null;
+
+    @Override
+    public void info(Map<String, String> arg, String message) {
+        logWithContext(null, arg, Level.INFO, message, null);
     }
 
+    @Override
     public void info(String methodName, Map<String, String> arg, String message) {
         logWithContext(methodName, arg, Level.INFO, message, null);
     }
 
+    @Override
+    public void error(Map<String, String> arg, String message, Throwable throwable) {
+        logWithContext(null, arg, Level.ERROR, message, throwable);
+    }
+
+    @Override
     public void error(String methodName, Map<String, String> arg, String message, Throwable throwable) {
         logWithContext(methodName, arg, Level.ERROR, message, throwable);
     }
 
+    @Override
+    public void debug(Map<String, String> arg, String message) {
+        logWithContext(null, arg, Level.DEBUG, message, null);
+    }
+
+    @Override
     public void debug(String methodName, Map<String, String> arg, String message) {
         logWithContext(methodName, arg, Level.DEBUG, message, null);
     }
 
+    @Override
+    public void warn(Map<String, String> arg, String message) {
+        logWithContext(null, arg, Level.WARN, message, null);
+    }
+
+    @Override
     public void warn(String methodName, Map<String, String> arg, String message) {
         logWithContext(methodName, arg, Level.WARN, message, null);
     }
 
     private void logWithContext(String methodName, Map<String, String> arg, Level level, String message, Throwable throwable) {
-        try (MDC.MDCCloseable ignored = MDC.putCloseable("methodName", methodName)) {
-
-            // 如果有额外参数，添加到MDC中
+        String callerClassName = getCallerClassName();
+        String actualMethodName = (methodName != null) ? methodName : callerClassName;
+        try (MDC.MDCCloseable ignored = MDC.putCloseable("methodName", actualMethodName)) {
+            arg.put("className", callerClassName);
             if (arg != null) {
                 MDC.setContextMap(arg);
             }
             log(level, message, throwable);
+        }
+    }
+
+    private String getCallerClassName() {
+        if (IS_JAVA_9_OR_HIGHER) {
+            return STACK_WALKER.walk(frames ->
+                    frames.dropWhile(frame -> frame.getClassName().equals(RengageLogService.class.getName()))
+                            .findFirst()
+                            .map(StackWalker.StackFrame::getClassName)
+                            .orElse(RengageLogService.class.getName())
+            );
+        } else {
+            StackTraceElement[] stackTrace = new Throwable().getStackTrace();
+            for (StackTraceElement element : stackTrace) {
+                if (!element.getClassName().equals(RengageLogService.class.getName())) {
+                    return element.getClassName();
+                }
+            }
+            return RengageLogService.class.getName();
+        }
+    }
+
+    private String getCallerMethodName() {
+        if (IS_JAVA_9_OR_HIGHER) {
+            return STACK_WALKER.walk(frames ->
+                    frames.dropWhile(frame -> frame.getClassName().equals(RengageLogService.class.getName()))
+                            .findFirst()
+                            .map(StackWalker.StackFrame::getMethodName)
+                            .orElse("unknown")
+            );
+        } else {
+            StackTraceElement[] stackTrace = new Throwable().getStackTrace();
+            for (StackTraceElement element : stackTrace) {
+                if (!element.getClassName().equals(RengageLogService.class.getName())) {
+                    return element.getMethodName();
+                }
+            }
+            return "unknown";
         }
     }
 
@@ -50,9 +114,6 @@ public class RengageLogService {
             Map<String, String> logMap = new HashMap<>();
             // 收集所有MDC中的内容
             logMap.putAll(MDC.getCopyOfContextMap() != null ? MDC.getCopyOfContextMap() : new HashMap<>());
-
-            // 添加className
-            logMap.put("className", className);
 
             // 如果有异常，添加异常信息
             if (throwable != null) {
@@ -73,7 +134,7 @@ public class RengageLogService {
             }
         } catch (Exception e) {
             logger.error("Error while logging: " + e.getMessage(), e);
-        }finally {
+        } finally {
             MDC.clear();
         }
     }
