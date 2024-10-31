@@ -61,9 +61,10 @@ public class RengageLogService implements RengageLogger {
 
     private void logWithContext(String methodName, Map<String, String> arg, Level level, String message, Throwable throwable) {
         String callerClassName = getCallerClassName();
-        String actualMethodName = (methodName != null) ? methodName : callerClassName;
+        String actualMethodName = (methodName != null) ? methodName : getCallerMethodName();
         try (MDC.MDCCloseable ignored = MDC.putCloseable("methodName", actualMethodName)) {
             arg.put("className", callerClassName);
+            arg.put("methodName", actualMethodName);
             if (arg != null) {
                 MDC.setContextMap(arg);
             }
