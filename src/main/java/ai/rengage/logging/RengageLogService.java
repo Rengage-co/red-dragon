@@ -3,6 +3,7 @@ package ai.rengage.logging;
 import ch.qos.logback.classic.Level;
 import net.logstash.logback.argument.StructuredArguments;
 import net.logstash.logback.encoder.org.apache.commons.lang3.exception.ExceptionUtils;
+import org.junit.platform.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -65,6 +66,9 @@ public class RengageLogService implements RengageLogger {
         try (MDC.MDCCloseable ignored = MDC.putCloseable("methodName", actualMethodName)) {
             arg.put("className", callerClassName);
             arg.put("methodName", actualMethodName);
+            if(StringUtils.isNotBlank(RengageTraceContext.getTraceId())){
+                arg.put("traceId", RengageTraceContext.getTraceId());
+            }
             if (arg != null) {
                 MDC.setContextMap(arg);
             }
