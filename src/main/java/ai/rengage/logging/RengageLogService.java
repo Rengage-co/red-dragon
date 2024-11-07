@@ -115,8 +115,8 @@ public class RengageLogService implements RengageLogger {
     }
 
     private void log(Level level, String message, Throwable throwable) {
+        Map<String, String> logMap = new HashMap<>();
         try {
-            Map<String, String> logMap = new HashMap<>();
             // 收集所有MDC中的内容
             logMap.putAll(MDC.getCopyOfContextMap() != null ? MDC.getCopyOfContextMap() : new HashMap<>());
 
@@ -141,6 +141,7 @@ public class RengageLogService implements RengageLogger {
             logger.error("Error while logging: " + e.getMessage(), e);
         } finally {
             MDC.clear();
+            logMap.clear();
         }
     }
 }
