@@ -95,9 +95,15 @@ class RengageLogServiceTest {
 
     public static void main(String[] args) {
         RengageLogService rengageLogService = new RengageLogService();
-        HelperImpl helper = new HelperImpl();
-        BusinessService businessService1 = new BusinessService(rengageLogService, helper);
-        businessService1.doBusiness();
+        Map<String, String> arg = new HashMap<>();
+        arg.put("key1", "value1");
+        arg.put("key2", "value2");
+        try {
+            int i = 1/0;
+        }catch (Exception e){
+            rengageLogService.error(arg,"这是一条信息日志",e);
+        }
+
     }
 
 }
