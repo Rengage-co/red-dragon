@@ -10,6 +10,7 @@ import org.slf4j.MDC;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RengageLogService implements RengageLogger {
     private static final Logger logger = LoggerFactory.getLogger(RengageLogService.class);
@@ -21,8 +22,18 @@ public class RengageLogService implements RengageLogger {
             : null;
 
     @Override
+    public void info(String message) {
+        logWithContext(null, new HashMap<>(), Level.INFO, message, null);
+    }
+
+    @Override
     public void info(Map<String, String> arg, String message) {
         logWithContext(null, arg, Level.INFO, message, null);
+    }
+
+    @Override
+    public void info(String methodName, String message) {
+        logWithContext(methodName, new HashMap<>(), Level.INFO, message, null);
     }
 
     @Override
@@ -31,8 +42,18 @@ public class RengageLogService implements RengageLogger {
     }
 
     @Override
+    public void error(String message, Throwable throwable) {
+        logWithContext(null, new HashMap<>(), Level.ERROR, message, throwable);
+    }
+
+    @Override
     public void error(Map<String, String> arg, String message, Throwable throwable) {
         logWithContext(null, arg, Level.ERROR, message, throwable);
+    }
+
+    @Override
+    public void error(String methodName, String message, Throwable throwable) {
+        logWithContext(methodName, new HashMap<>(), Level.ERROR, message, throwable);
     }
 
     @Override
@@ -41,8 +62,18 @@ public class RengageLogService implements RengageLogger {
     }
 
     @Override
+    public void debug(String message) {
+        logWithContext(null, new HashMap<>(), Level.DEBUG, message, null);
+    }
+
+    @Override
     public void debug(Map<String, String> arg, String message) {
         logWithContext(null, arg, Level.DEBUG, message, null);
+    }
+
+    @Override
+    public void debug(String methodName, String message) {
+        logWithContext(methodName, new HashMap<>(), Level.DEBUG, message, null);
     }
 
     @Override
@@ -51,8 +82,18 @@ public class RengageLogService implements RengageLogger {
     }
 
     @Override
+    public void warn(String message) {
+        logWithContext(null, new HashMap<>(), Level.WARN, message, null);
+    }
+
+    @Override
     public void warn(Map<String, String> arg, String message) {
         logWithContext(null, arg, Level.WARN, message, null);
+    }
+
+    @Override
+    public void warn(String methodName, String message) {
+        logWithContext(methodName, new HashMap<>(), Level.WARN, message, null);
     }
 
     @Override
@@ -63,10 +104,13 @@ public class RengageLogService implements RengageLogger {
     private void logWithContext(String methodName, Map<String, String> arg, Level level, String message, Throwable throwable) {
         String callerClassName = getCallerClassName();
         String actualMethodName = (methodName != null) ? methodName : getCallerMethodName();
+        if (Objects.isNull(arg)) {
+            arg = new HashMap<>();
+        }
         try (MDC.MDCCloseable ignored = MDC.putCloseable("methodName", actualMethodName)) {
             arg.put("className", callerClassName);
             arg.put("methodName", actualMethodName);
-            if(StringUtils.isNotBlank(RengageTraceContext.getTraceId())){
+            if (StringUtils.isNotBlank(RengageTraceContext.getTraceId())) {
                 arg.put("traceId", RengageTraceContext.getTraceId());
             }
             if (arg != null) {
