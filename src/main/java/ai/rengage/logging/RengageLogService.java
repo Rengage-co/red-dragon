@@ -1,6 +1,7 @@
 package ai.rengage.logging;
 
 import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 import net.logstash.logback.argument.StructuredArguments;
 import net.logstash.logback.encoder.org.apache.commons.lang3.StringUtils;
 import net.logstash.logback.encoder.org.apache.commons.lang3.exception.ExceptionUtils;
@@ -13,7 +14,12 @@ import java.util.Map;
 import java.util.Objects;
 
 public class RengageLogService implements RengageLogger {
-    private static final Logger logger = LoggerFactory.getLogger(RengageLogService.class);
+//    private static final Logger logger = LoggerFactory.getLogger(RengageLogService.class);
+
+    LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+    ch.qos.logback.classic.Logger logger = loggerContext.getLogger(Logger.ROOT_LOGGER_NAME);
+
     private static final String JAVA_VERSION = System.getProperty("java.version");
     private static final boolean IS_JAVA_9_OR_HIGHER = !JAVA_VERSION.startsWith("1.");
 
